@@ -1,0 +1,28 @@
+{
+  "name": "laragon-project-manager",
+  "version": "1.0.0",
+  "description": "Gestor de proyectos para Laragon con ejecución automática",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "terminal": "node terminal-server.js",
+    "terminal:dev": "nodemon terminal-server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "ws": "^8.18.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "laragon",
+    "project-manager",
+    "development"
+  ],
+  "author": "Tu nombre",
+  "license": "MIT"
+}

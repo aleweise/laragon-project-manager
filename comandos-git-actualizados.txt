@@ -1,0 +1,35 @@
+# COMANDOS PARA SUBIR A GITHUB DESDE LA CARPETA ORGANIZADA
+
+# IMPORTANTE: Ejecuta estos comandos desde PowerShell en la carpeta laragon-project-manager
+
+# 1. Navegar a la carpeta del proyecto
+cd C:\laragon\www\laragon-project-manager
+
+# 2. Inicializar Git
+git init
+
+# 3. Configurar usuario (reemplaza con tus datos - SOLO LA PRIMERA VEZ)
+git config --global user.name "Tu Nombre Aquí"
+git config --global user.email "tu-email@ejemplo.com"
+
+# 4. Agregar archivos
+git add .
+
+# 5. Primer commit
+git commit -m "🚀 Initial commit: Laragon Project Manager with integrated terminal"
+
+# 6. Conectar con GitHub (REEMPLAZA TU-USUARIO y NOMBRE-REPO)
+git remote add origin https://github.com/TU-USUARIO/laragon-project-manager.git
+
+# 7. Cambiar a rama main
+git branch -M main
+
+# 8. Subir código
+git push -u origin main
+
+# ¡LISTO! Tu código ya está en GitHub
+
+# COMANDOS PARA FUTURAS ACTUALIZACIONES:
+# git add .
+# git commit -m "Descripción de los cambios"
+# git push

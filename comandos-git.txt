@@ -1,0 +1,25 @@
+# COMANDOS PARA SUBIR A GITHUB - COPIA UNO POR UNO
+
+# 1. Inicializar Git
+git init
+
+# 2. Configurar usuario (reemplaza con tus datos)
+git config --global user.name "aleweise"
+git config --global user.email "tu-email@ejemplo.com"
+
+# 3. Agregar archivos
+git add .
+
+# 4. Primer commit
+git commit -m "🚀 Initial commit: Laragon Project Manager with integrated terminal"
+
+# 5. Conectar con GitHub (REEMPLAZA TU-USUARIO y NOMBRE-REPO)
+git remote add origin https://github.com/TU-USUARIO/NOMBRE-REPO.git
+
+# 6. Cambiar a rama main
+git branch -M main
+
+# 7. Subir código
+git push -u origin main
+
+# ¡LISTO! Tu código ya está en GitHub

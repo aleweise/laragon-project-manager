@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Proyectos - Terminal Real</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 40px; color: white; }
+        .header h1 { font-size: 3rem; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .header p { font-size: 1.2rem; opacity: 0.9; }
+        
+        /* Terminal Real */
+        .terminal-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px 0;
+            backdrop-filter: blur(10px);
+        }
+        .terminal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: white;
+        }
+        .terminal-title {
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .terminal-controls { display: flex; gap: 10px; }
+        .terminal-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .terminal-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+        .terminal-container {
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 0;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #333;
+        }
+        .terminal-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .terminal-output {
+            flex: 1;
+            padding: 15px;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            line-height: 1.4;
+        }
+        .terminal-input-container {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background: #1a1a1a;
+            border-top: 1px solid #333;
+        }
+        .terminal-prompt {
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .terminal-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            outline: none;
+        }
+        .quick-commands {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        .quick-cmd {
+            background: #333;
+            color: #00ff00;
+            border: 1px solid #555;
+            padding: 6px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+        }
+        .quick-cmd:hover {
+            background: #555;
+            border-color: #00ff00;
+        }
+        .connection-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .status-connected { background: #d4edda; color: #155724; }
+        .status-disconnected { background: #f8d7da; color: #721c24; }
+        .status-connecting { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-terminal"></i> Terminal Real</h1>
+            <p>Terminal integrada con ejecución real de comandos</p>
+        </div>
+
+        <div class="terminal-section">
+            <div class="terminal-header">
+                <div class="terminal-title">
+                    <i class="fas fa-terminal"></i>
+                    Terminal Real
+                    <div class="connection-status" id="connectionStatus">
+                        <i class="fas fa-circle"></i>
+                        Conectando...
+                    </div>
+                </div>
+                <div class="terminal-controls">
+                    <button class="terminal-btn" onclick="clearTerminal()">
+                        <i class="fas fa-trash"></i>
+                        Limpiar
+                    </button>
+                    <button class="terminal-btn" onclick="reconnectTerminal()">
+                        <i class="fas fa-sync-alt"></i>
+                        Reconectar
+                    </button>
+                </div>
+            </div>
+
+            <div class="quick-commands">
+                <div class="quick-cmd" onclick="executeQuickCommand('cd C:\\laragon\\www')">cd laragon</div>
+                <div class="quick-cmd" onclick="executeQuickCommand('ls')">listar (ls)</div>
+                <div class="quick-cmd" onclick="executeQuickCommand('dir')">listar (dir)</div>
+                <div class="quick-cmd" onclick="executeQuickCommand('pwd')">ubicación</div>
+                <div class="quick-cmd" onclick="executeQuickCommand('npm install')">npm install</div>
+                <div class="quick-cmd" onclick="executeQuickCommand('npm run dev')">npm dev</div>
+                <div class="quick-cmd" onclick="executeQuickCommand('pnpm install')">pnpm install</div>
+                <div class="quick-cmd" onclick="executeQuickCommand('pnpm run dev')">pnpm dev</div>
+                <div class="quick-cmd" onclick="executeQuickCommand('git status')">git status</div>
+                <div class="quick-cmd" onclick="executeQuickCommand('clear')">limpiar</div>
+            </div>
+
+            <div class="terminal-container">
+                <div class="terminal-content">
+                    <div class="terminal-output" id="terminalOutput">Iniciando terminal real...
+Conectando al servidor...
+
+</div>
+                    <div class="terminal-input-container">
+                        <span class="terminal-prompt" id="terminalPrompt">PS C:\laragon\www></span>
+                        <input type="text" class="terminal-input" id="terminalInput" 
+                               placeholder="Escribe tu comando aquí..." 
+                               onkeypress="handleTerminalInput(event)">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let websocket = null;
+        let sessionId = null;
+        let isConnected = false;
+        let commandHistory = [];
+        let historyIndex = -1;
+
+        function initializeTerminal() {
+            connectWebSocket();
+        }
+
+        function connectWebSocket() {
+            updateConnectionStatus('connecting');
+            
+            try {
+                websocket = new WebSocket('ws://localhost:3002');
+                
+                websocket.onopen = function() {
+                    console.log('Conectado al servidor de terminal');
+                    isConnected = true;
+                    updateConnectionStatus('connected');
+                    startTerminalSession();
+                };
+                
+                websocket.onmessage = function(event) {
+                    const data = JSON.parse(event.data);
+                    handleTerminalMessage(data);
+                };
+                
+                websocket.onclose = function() {
+                    console.log('Conexión cerrada');
+                    isConnected = false;
+                    updateConnectionStatus('disconnected');
+                    
+                    setTimeout(() => {
+                        if (!isConnected) {
+                            connectWebSocket();
+                        }
+                    }, 3000);
+                };
+                
+                websocket.onerror = function(error) {
+                    console.error('Error de WebSocket:', error);
+                    updateConnectionStatus('disconnected');
+                };
+                
+            } catch (error) {
+                console.error('Error conectando WebSocket:', error);
+                updateConnectionStatus('disconnected');
+                appendToTerminal('❌ Error: No se puede conectar al servidor de terminal.\n', 'error');
+                appendToTerminal('💡 Ejecuta: node simple-terminal-server.js\n', 'info');
+                appendToTerminal('💡 O verifica que el puerto 3002 esté disponible\n', 'info');
+            }
+        }
+
+        function startTerminalSession() {
+            if (!websocket || websocket.readyState !== WebSocket.OPEN) return;
+            
+            sessionId = `session_${Date.now()}`;
+            
+            websocket.send(JSON.stringify({
+                type: 'start_session',
+                sessionId: sessionId,
+                config: {
+                    shell: 'powershell.exe',
+                    cwd: 'C:\\laragon\\www'
+                }
+            }));
+        }
+
+        function handleTerminalMessage(data) {
+            switch (data.type) {
+                case 'session_started':
+                    appendToTerminal('Terminal real conectada y lista!\n', 'success');
+                    break;
+                    
+                case 'stdout':
+                    appendToTerminal(data.data, 'output');
+                    break;
+                    
+                case 'stderr':
+                    appendToTerminal(data.data, 'error');
+                    break;
+                    
+                case 'error':
+                    appendToTerminal(`Error: ${data.error}\n`, 'error');
+                    break;
+                    
+                case 'close':
+                    appendToTerminal(`${data.data}\n`, 'info');
+                    break;
+                    
+                case 'session_error':
+                    appendToTerminal(`Error de sesión: ${data.error}\n`, 'error');
+                    break;
+            }
+        }
+
+        function appendToTerminal(text, type = 'output') {
+            const output = document.getElementById('terminalOutput');
+            let color = '#00ff00';
+            
+            switch (type) {
+                case 'error': color = '#ff6666'; break;
+                case 'info': color = '#ffaa00'; break;
+                case 'success': color = '#00aaff'; break;
+            }
+            
+            const span = document.createElement('span');
+            span.style.color = color;
+            span.textContent = text;
+            output.appendChild(span);
+            
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function handleTerminalInput(event) {
+            if (event.key === 'Enter') {
+                const input = document.getElementById('terminalInput');
+                const command = input.value.trim();
+                
+                if (command) {
+                    executeRealCommand(command);
+                    addToHistory(command);
+                    input.value = '';
+                    historyIndex = -1;
+                }
+            } else if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                navigateHistory('up');
+            } else if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                navigateHistory('down');
+            }
+        }
+
+        function executeRealCommand(command) {
+            if (!isConnected || !websocket) {
+                appendToTerminal('Error: No hay conexión con el servidor\n', 'error');
+                return;
+            }
+
+            const prompt = document.getElementById('terminalPrompt').textContent;
+            appendToTerminal(`${prompt} ${command}\n`, 'output');
+
+            websocket.send(JSON.stringify({
+                type: 'execute_command',
+                command: command,
+                sessionId: sessionId
+            }));
+        }
+
+        function executeQuickCommand(command) {
+            const input = document.getElementById('terminalInput');
+            input.value = command;
+            input.focus();
+        }
+
+        function addToHistory(command) {
+            if (commandHistory[commandHistory.length - 1] !== command) {
+                commandHistory.push(command);
+                if (commandHistory.length > 50) {
+                    commandHistory.shift();
+                }
+            }
+        }
+
+        function navigateHistory(direction) {
+            const input = document.getElementById('terminalInput');
+            
+            if (direction === 'up' && historyIndex < commandHistory.length - 1) {
+                historyIndex++;
+                input.value = commandHistory[commandHistory.length - 1 - historyIndex];
+            } else if (direction === 'down' && historyIndex > 0) {
+                historyIndex--;
+                input.value = commandHistory[commandHistory.length - 1 - historyIndex];
+            } else if (direction === 'down' && historyIndex === 0) {
+                historyIndex = -1;
+                input.value = '';
+            }
+        }
+
+        function clearTerminal() {
+            const output = document.getElementById('terminalOutput');
+            output.innerHTML = 'Terminal limpia\n';
+        }
+
+        function reconnectTerminal() {
+            if (websocket) {
+                websocket.close();
+            }
+            setTimeout(() => {
+                connectWebSocket();
+            }, 1000);
+        }
+
+        function updateConnectionStatus(status) {
+            const statusEl = document.getElementById('connectionStatus');
+            
+            switch (status) {
+                case 'connected':
+                    statusEl.className = 'connection-status status-connected';
+                    statusEl.innerHTML = '<i class="fas fa-circle"></i> Conectado';
+                    break;
+                case 'disconnected':
+                    statusEl.className = 'connection-status status-disconnected';
+                    statusEl.innerHTML = '<i class="fas fa-circle"></i> Desconectado';
+                    break;
+                case 'connecting':
+                    statusEl.className = 'connection-status status-connecting';
+                    statusEl.innerHTML = '<i class="fas fa-circle"></i> Conectando...';
+                    break;
+            }
+        }
+
+        // Función para obtener parámetros de URL
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Función para ejecutar comandos de proyecto automáticamente
+        function executeProjectCommands() {
+            const projectName = getUrlParameter('project');
+            if (!projectName) return;
+
+            // Definir comandos por proyecto
+            const projectCommands = {
+                'bolt.diy': [
+                    'cd "C:\\laragon\\www\\bolt.diy"',
+                    'pnpm install',
+                    'pnpm run dev'
+                ],
+                'Biblia matic': [
+                    'cd "C:\\laragon\\www\\Biblia matic"',
+                    'npm install',
+                    'npm run dev'
+                ],
+                'biblia a json': [
+                    'cd "C:\\laragon\\www\\biblia a json"',
+                    'npm install',
+                    'npm run dev'
+                ],
+                'pdf-to-structured-json-converter': [
+                    'cd "C:\\laragon\\www\\pdf-to-structured-json-converter"',
+                    'npm install',
+                    'npm start'
+                ]
+            };
+
+            const commands = projectCommands[projectName];
+            if (!commands) return;
+
+            // Mostrar información del proyecto
+            appendToTerminal(`\n=== EJECUTANDO PROYECTO: ${projectName.toUpperCase()} ===\n`, 'success');
+            appendToTerminal('Comandos que se ejecutarán:\n', 'info');
+            commands.forEach((cmd, index) => {
+                appendToTerminal(`${index + 1}. ${cmd}\n`, 'info');
+            });
+            appendToTerminal('\nPresiona Enter para continuar o escribe tus propios comandos...\n\n', 'info');
+
+            // Ejecutar comandos automáticamente después de 3 segundos
+            setTimeout(() => {
+                if (isConnected) {
+                    executeCommandSequence(commands);
+                }
+            }, 3000);
+        }
+
+        function executeCommandSequence(commands) {
+            let index = 0;
+            
+            function executeNext() {
+                if (index < commands.length && isConnected) {
+                    const command = commands[index];
+                    appendToTerminal(`\n> Ejecutando: ${command}\n`, 'success');
+                    executeRealCommand(command);
+                    index++;
+                    
+                    // Esperar 3 segundos antes del siguiente comando
+                    setTimeout(executeNext, 3000);
+                } else if (index >= commands.length) {
+                    appendToTerminal('\n=== TODOS LOS COMANDOS EJECUTADOS ===\n', 'success');
+                    appendToTerminal('El proyecto debería estar ejecutándose ahora.\n', 'info');
+                }
+            }
+            
+            executeNext();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeTerminal();
+            document.getElementById('terminalInput').focus();
+            
+            // Ejecutar comandos de proyecto si se especifica en URL
+            setTimeout(() => {
+                executeProjectCommands();
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

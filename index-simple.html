@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Proyectos - Laragon</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .project-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .project-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .tech-tag {
+            background: #f0f0f0;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #555;
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-dev {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-dev:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+
+        .btn-open {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-open:hover {
+            background: #5a67d8;
+            transform: translateY(-1px);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 40px 0;
+            color: white;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .filters-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .filters-title {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            width: 300px;
+            font-size: 1rem;
+            outline: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .tech-filters {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .tech-filter {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid transparent;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .tech-filter:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .tech-filter.active {
+            background: white;
+            color: #667eea;
+            border-color: white;
+        }
+
+        .clear-filters {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .clear-filters:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .project-card.hidden {
+            display: none;
+        }
+
+        .no-results {
+            text-align: center;
+            color: white;
+            font-size: 1.2rem;
+            margin: 40px 0;
+            display: none;
+        }
+
+        /* Modal para instrucciones */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .command-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .command-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .command-code {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 10px 0;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .copy-btn:hover {
+            background: #5a67d8;
+        }
+
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* Terminal embebida */
+        .terminal-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .terminal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .terminal-title {
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .terminal-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .terminal-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .terminal-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .terminal-container {
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 0;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #333;
+        }
+
+        .terminal-tabs {
+            background: #2d2d2d;
+            display: flex;
+            border-bottom: 1px solid #444;
+            padding: 0;
+        }
+
+        .terminal-tab {
+            background: #2d2d2d;
+            color: #ccc;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-right: 1px solid #444;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .terminal-tab.active {
+            background: #1a1a1a;
+            color: #00ff00;
+        }
+
+        .terminal-tab:hover {
+            background: #3a3a3a;
+        }
+
+        .terminal-content {
+            height: calc(100% - 45px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .terminal-output {
+            flex: 1;
+            padding: 15px;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            line-height: 1.4;
+        }
+
+        .terminal-input-container {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background: #1a1a1a;
+            border-top: 1px solid #333;
+        }
+
+        .terminal-prompt {
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .terminal-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .terminal-input::placeholder {
+            color: #666;
+        }
+
+        .quick-commands {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .quick-cmd {
+            background: #333;
+            color: #00ff00;
+            border: 1px solid #555;
+            padding: 6px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .quick-cmd:hover {
+            background: #555;
+            border-color: #00ff00;
+        }
+
+        .terminal-status {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #00ff00;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        .command-history {
+            max-height: 150px;
+            overflow-y: auto;
+            background: #2d2d2d;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .history-item {
+            padding: 8px 12px;
+            color: #ccc;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #444;
+        }
+
+        .history-item:hover {
+            background: #3a3a3a;
+            color: #00ff00;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Estilos para iframe de terminal */
+        .terminal-iframe-container {
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 0;
+            overflow: hidden;
+            border: 2px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .terminal-iframe-container iframe {
+            display: block;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .terminal-iframe-container.expanded iframe {
+            height: 700px !important;
+        }
+
+        .terminal-iframe-container.minimized iframe {
+            height: 200px !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-code"></i> Mis Proyectos</h1>
+            <p>Navegador de proyectos en Laragon</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-number" id="projectCount">0</span>
+                <span class="stat-label">Proyectos</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="techCount">0</span>
+                <span class="stat-label">Tecnologías</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="visibleCount">0</span>
+                <span class="stat-label">Visibles</span>
+            </div>
+        </div>
+
+        <div class="terminal-section">
+            <div class="terminal-header">
+                <div class="terminal-title">
+                    <i class="fas fa-terminal"></i>
+                    Terminal Real Integrada
+                </div>
+                <div class="terminal-controls">
+                    <button class="terminal-btn" onclick="refreshTerminal()">
+                        <i class="fas fa-sync-alt"></i>
+                        Actualizar
+                    </button>
+                    <button class="terminal-btn" onclick="openTerminalInNewTab()">
+                        <i class="fas fa-external-link-alt"></i>
+                        Nueva Pestaña
+                    </button>
+                    <button class="terminal-btn" onclick="toggleTerminalSize()">
+                        <i class="fas fa-expand-alt" id="toggleIcon"></i>
+                        <span id="toggleText">Expandir</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="terminal-iframe-container" id="terminalContainer">
+                <iframe 
+                    id="terminalIframe"
+                    src="real-terminal.html" 
+                    frameborder="0"
+                    style="width: 100%; height: 500px; border-radius: 10px; background: #1a1a1a;">
+                </iframe>
+            </div>
+        </div>
+
+        <div class="filters-section">
+            <div class="filters-title">
+                <i class="fas fa-filter"></i> Filtrar Proyectos
+            </div>
+
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="Buscar proyectos...">
+            </div>
+
+            <div class="tech-filters" id="techFilters">
+                <!-- Los filtros se cargarán dinámicamente -->
+            </div>
+
+            <div style="text-align: center;">
+                <button class="clear-filters" onclick="clearAllFilters()">
+                    <i class="fas fa-times"></i> Limpiar Filtros
+                </button>
+            </div>
+        </div>
+
+        <div class="no-results" id="noResults">
+            <i class="fas fa-search"></i>
+            <p>No se encontraron proyectos con los filtros seleccionados</p>
+        </div>
+
+        <div class="projects-grid" id="projectsGrid">
+            <!-- Los proyectos se cargarán dinámicamente -->
+        </div>
+    </div>
+
+    <!-- Modal para instrucciones -->
+    <div id="instructionsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-terminal"></i>
+                    <span id="modalProjectName">Instrucciones de Desarrollo</span>
+                </div>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div id="modalContent">
+                <!-- El contenido se cargará dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const projects = [
+            {
+                name: 'Biblia',
+                description: 'Aplicación web para lectura y estudio de la Biblia con funcionalidades avanzadas.',
+                icon: 'fas fa-book',
+                tech: ['JavaScript', 'Node.js', 'HTML'],
+                folder: 'biblia',
+                url: 'http://localhost/biblia',
+                canRun: false
+            },
+            {
+                name: 'Biblia JSON',
+                description: 'API y servidor para datos bíblicos en formato JSON con interfaz web.',
+                icon: 'fas fa-database',
+                tech: ['Node.js', 'JSON', 'Express'],
+                folder: 'biblia a json',
+                url: 'http://localhost/biblia%20a%20json',
+                canRun: true,
+                commands: ['npm install', 'npm run dev']
+            },
+            {
+                name: 'Biblia Matic',
+                description: 'Aplicación automática para gestión y estudio bíblico.',
+                icon: 'fas fa-cross',
+                tech: ['React', 'JavaScript'],
+                folder: 'Biblia matic',
+                url: 'http://localhost/Biblia%20matic',
+                canRun: true,
+                commands: ['npm install', 'npm run dev']
+            },
+            {
+                name: 'Bolt.diy',
+                description: 'Plataforma de desarrollo colaborativo con herramientas modernas.',
+                icon: 'fas fa-bolt',
+                tech: ['TypeScript', 'React', 'Vite', 'Docker'],
+                folder: 'bolt.diy',
+                url: 'http://localhost/bolt.diy',
+                canRun: true,
+                commands: ['pnpm install', 'pnpm run dev']
+            },
+            {
+                name: 'Bus Tracker',
+                description: 'Sistema de seguimiento de autobuses en tiempo real.',
+                icon: 'fas fa-bus',
+                tech: ['PHP', 'JavaScript', 'GPS'],
+                folder: 'bustracker',
+                url: 'http://localhost/bustracker',
+                canRun: false
+            },
+            {
+                name: 'Colegio',
+                description: 'Sistema de gestión escolar completo para instituciones educativas.',
+                icon: 'fas fa-school',
+                tech: ['PHP', 'MySQL', 'Bootstrap'],
+                folder: 'colegio',
+                url: 'http://localhost/colegio',
+                canRun: false
+            },
+            {
+                name: 'Kindergarten Website',
+                description: 'Sitio web moderno para jardín de infantes con información y recursos.',
+                icon: 'fas fa-child',
+                tech: ['HTML', 'CSS', 'JavaScript'],
+                folder: 'kindergarten-website',
+                url: 'http://localhost/kindergarten-website',
+                canRun: false
+            },
+            {
+                name: 'Moodle',
+                description: 'Plataforma de aprendizaje en línea personalizada.',
+                icon: 'fas fa-graduation-cap',
+                tech: ['PHP', 'MySQL', 'Moodle'],
+                folder: 'moodle',
+                url: 'http://localhost/moodle',
+                canRun: false
+            },
+            {
+                name: 'PDF to JSON Converter',
+                description: 'Herramienta para convertir documentos PDF a formato JSON estructurado.',
+                icon: 'fas fa-file-pdf',
+                tech: ['Node.js', 'PDF.js', 'JSON'],
+                folder: 'pdf-to-structured-json-converter',
+                url: 'http://localhost/pdf-to-structured-json-converter',
+                canRun: true,
+                commands: ['npm install', 'npm start']
+            },
+            {
+                name: 'Safari',
+                description: 'Proyecto web con temática de safari y naturaleza.',
+                icon: 'fas fa-paw',
+                tech: ['HTML', 'CSS', 'JavaScript'],
+                folder: 'safari',
+                url: 'http://localhost/safari',
+                canRun: false
+            },
+            {
+                name: 'School Bus Tracker',
+                description: 'Sistema avanzado de rastreo de autobuses escolares.',
+                icon: 'fas fa-route',
+                tech: ['PHP', 'JavaScript', 'Maps API'],
+                folder: 'schoolbustrac',
+                url: 'http://localhost/schoolbustrac',
+                canRun: false
+            },
+            {
+                name: 'Hello Shivam',
+                description: 'Sitio web personal con portafolio y información profesional.',
+                icon: 'fas fa-user',
+                tech: ['HTML', 'CSS', 'JavaScript'],
+                folder: 'www.helloshivam.com',
+                url: 'http://localhost/www.helloshivam.com',
+                canRun: false
+            }
+        ];
+
+        function createProjectCard(project) {
+            return `
+                <div class="project-card">
+                    <div class="project-icon">
+                        <i class="${project.icon}"></i>
+                    </div>
+                    <div class="project-title">${project.name}</div>
+                    <div class="project-description">${project.description}</div>
+                    <div class="project-tech">
+                        ${project.tech.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
+                    </div>
+                    <div class="project-actions">
+                        ${project.canRun ? `
+                            <button class="action-btn btn-dev" onclick="executeProjectCommands('${project.folder}')">
+                                <i class="fas fa-play"></i>
+                                Ejecutar en Terminal
+                            </button>
+                        ` : ''}
+                        <button class="action-btn btn-open" onclick="openProject('${project.url}')">
+                            <i class="fas fa-globe"></i>
+                            Ver en Laragon
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showInstructions(projectFolder) {
+            const project = projects.find(p => p.folder === projectFolder);
+            if (!project) return;
+
+            const modal = document.getElementById('instructionsModal');
+            const modalTitle = document.getElementById('modalProjectName');
+            const modalContent = document.getElementById('modalContent');
+
+            modalTitle.textContent = `${project.name} - Comandos de Desarrollo`;
+
+            const laraganPath = 'C:\\laragon\\www';
+            const projectPath = `${laraganPath}\\${project.folder}`;
+
+            modalContent.innerHTML = `
+                <div class="command-section">
+                    <div class="command-title">
+                        <span class="step-number">1</span>
+                        <i class="fas fa-folder-open"></i>
+                        Navegar al directorio del proyecto
+                    </div>
+                    <div class="command-code">
+                        cd "${projectPath}"
+                        <button class="copy-btn" onclick="copyToClipboard('cd &quot;${projectPath}&quot;')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="command-section">
+                    <div class="command-title">
+                        <span class="step-number">2</span>
+                        <i class="fas fa-download"></i>
+                        Instalar dependencias
+                    </div>
+                    <div class="command-code">
+                        ${project.commands[0]}
+                        <button class="copy-btn" onclick="copyToClipboard('${project.commands[0]}')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="command-section">
+                    <div class="command-title">
+                        <span class="step-number">3</span>
+                        <i class="fas fa-play"></i>
+                        Ejecutar en modo desarrollo
+                    </div>
+                    <div class="command-code">
+                        ${project.commands[1]}
+                        <button class="copy-btn" onclick="copyToClipboard('${project.commands[1]}')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="command-section">
+                    <div class="command-title">
+                        <i class="fas fa-info-circle"></i>
+                        Información adicional
+                    </div>
+                    <p><strong>Ruta del proyecto:</strong> ${projectPath}</p>
+                    <p><strong>Tecnologías:</strong> ${project.tech.join(', ')}</p>
+                    <p><strong>Nota:</strong> El servidor se ejecutará típicamente en puerto 3000, 5173 o similar. Revisa la consola para ver la URL exacta.</p>
+                </div>
+            `;
+
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('instructionsModal').style.display = 'none';
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Mostrar feedback visual
+                const btn = event.target.closest('.copy-btn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i>';
+                btn.style.background = '#28a745';
+
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = '#667eea';
+                }, 1000);
+            });
+        }
+
+        // Cerrar modal al hacer clic fuera
+        window.onclick = function (event) {
+            const modal = document.getElementById('instructionsModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        let activeFilters = [];
+        let searchTerm = '';
+
+        function getAllTechnologies() {
+            const allTech = new Set();
+            projects.forEach(project => {
+                project.tech.forEach(tech => allTech.add(tech));
+            });
+            return Array.from(allTech).sort();
+        }
+
+        function createTechFilter(tech) {
+            return `
+                <span class="tech-filter" onclick="toggleTechFilter('${tech}')" data-tech="${tech}">
+                    ${tech}
+                </span>
+            `;
+        }
+
+        function loadTechFilters() {
+            const techFilters = document.getElementById('techFilters');
+            const technologies = getAllTechnologies();
+
+            techFilters.innerHTML = technologies.map(createTechFilter).join('');
+
+            // Actualizar contador de tecnologías
+            document.getElementById('techCount').textContent = technologies.length;
+        }
+
+        function toggleTechFilter(tech) {
+            const filterElement = document.querySelector(`[data-tech="${tech}"]`);
+
+            if (activeFilters.includes(tech)) {
+                activeFilters = activeFilters.filter(f => f !== tech);
+                filterElement.classList.remove('active');
+            } else {
+                activeFilters.push(tech);
+                filterElement.classList.add('active');
+            }
+
+            filterProjects();
+        }
+
+        function filterProjects() {
+            const grid = document.getElementById('projectsGrid');
+            const cards = grid.querySelectorAll('.project-card');
+            const noResults = document.getElementById('noResults');
+            let visibleCount = 0;
+
+            cards.forEach((card, index) => {
+                const project = projects[index];
+                let shouldShow = true;
+
+                // Filtro por búsqueda de texto
+                if (searchTerm) {
+                    const searchLower = searchTerm.toLowerCase();
+                    const matchesName = project.name.toLowerCase().includes(searchLower);
+                    const matchesDescription = project.description.toLowerCase().includes(searchLower);
+                    const matchesTech = project.tech.some(tech =>
+                        tech.toLowerCase().includes(searchLower)
+                    );
+
+                    if (!matchesName && !matchesDescription && !matchesTech) {
+                        shouldShow = false;
+                    }
+                }
+
+                // Filtro por tecnologías
+                if (activeFilters.length > 0) {
+                    const hasMatchingTech = activeFilters.some(filter =>
+                        project.tech.includes(filter)
+                    );
+                    if (!hasMatchingTech) {
+                        shouldShow = false;
+                    }
+                }
+
+                if (shouldShow) {
+                    card.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            // Mostrar/ocultar mensaje de "no hay resultados"
+            if (visibleCount === 0) {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+            }
+
+            // Actualizar contador de proyectos visibles
+            document.getElementById('visibleCount').textContent = visibleCount;
+        }
+
+        function clearAllFilters() {
+            // Limpiar filtros de tecnología
+            activeFilters = [];
+            document.querySelectorAll('.tech-filter').forEach(filter => {
+                filter.classList.remove('active');
+            });
+
+            // Limpiar búsqueda
+            searchTerm = '';
+            document.getElementById('searchInput').value = '';
+
+            // Mostrar todos los proyectos
+            filterProjects();
+        }
+
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+
+            searchInput.addEventListener('input', (e) => {
+                searchTerm = e.target.value;
+                filterProjects();
+            });
+        }
+
+        function loadProjects() {
+            const grid = document.getElementById('projectsGrid');
+            const projectCount = document.getElementById('projectCount');
+
+            grid.innerHTML = projects.map(createProjectCard).join('');
+            projectCount.textContent = projects.length;
+            document.getElementById('visibleCount').textContent = projects.length;
+        }
+
+        function openProject(url) {
+            window.open(url, '_blank');
+        }
+
+        // Variables para la terminal real
+        let commandHistory = [];
+        let historyIndex = -1;
+        let currentTab = 'powershell';
+        let terminalMinimized = false;
+        let websocket = null;
+        let sessionId = null;
+        let isConnected = false;
+
+        // Funciones de la terminal
+        function handleTerminalInput(event) {
+            if (event.key === 'Enter') {
+                const input = document.getElementById('terminalInput');
+                const command = input.value.trim();
+
+                if (command) {
+                    executeCommand(command);
+                    addToHistory(command);
+                    input.value = '';
+                    historyIndex = -1;
+                }
+            } else if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                navigateHistory('up');
+            } else if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                navigateHistory('down');
+            } else if (event.key === 'Tab') {
+                event.preventDefault();
+                autoComplete();
+            }
+        }
+
+        function executeCommand(command) {
+            const output = document.getElementById('terminalOutput');
+            const prompt = document.getElementById('terminalPrompt').textContent;
+
+            // Agregar comando al output
+            output.innerHTML += `\n${prompt} ${command}\n`;
+
+            // Simular ejecución del comando
+            if (command.toLowerCase() === 'cls' || command.toLowerCase() === 'clear') {
+                clearTerminal();
+                return;
+            }
+
+            if (command.toLowerCase() === 'help') {
+                showTerminalHelp();
+                return;
+            }
+
+            if (command.toLowerCase().startsWith('cd ')) {
+                changeDirectory(command);
+                return;
+            }
+
+            // Para otros comandos, mostrar mensaje informativo
+            const timestamp = new Date().toLocaleTimeString();
+            output.innerHTML += `<span style="color: #ffaa00;">[${timestamp}] Comando: ${command}</span>\n`;
+            output.innerHTML += `<span style="color: #ccc;">Nota: Esta es una terminal simulada. Para ejecutar comandos reales:</span>\n`;
+            output.innerHTML += `<span style="color: #00aaff;">1. Copia el comando con Ctrl+C</span>\n`;
+            output.innerHTML += `<span style="color: #00aaff;">2. Abre PowerShell real</span>\n`;
+            output.innerHTML += `<span style="color: #00aaff;">3. Pega y ejecuta el comando</span>\n`;
+
+            // Auto-scroll al final
+            output.scrollTop = output.scrollHeight;
+
+            // Actualizar status
+            updateTerminalStatus('Comando ejecutado');
+        }
+
+        function changeDirectory(command) {
+            const output = document.getElementById('terminalOutput');
+            const prompt = document.getElementById('terminalPrompt');
+            const path = command.substring(3).trim().replace(/"/g, '');
+
+            // Simular cambio de directorio
+            if (path) {
+                prompt.textContent = `PS ${path}>`;
+                output.innerHTML += `<span style="color: #00ff00;">Directorio cambiado a: ${path}</span>\n`;
+            } else {
+                output.innerHTML += `<span style="color: #ff6666;">Error: Especifica una ruta válida</span>\n`;
+            }
+
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function showTerminalHelp() {
+            const output = document.getElementById('terminalOutput');
+            output.innerHTML += `<span style="color: #00aaff;">═══ AYUDA DE TERMINAL INTEGRADA ═══</span>\n`;
+            output.innerHTML += `<span style="color: #ccc;">Comandos disponibles:</span>\n`;
+            output.innerHTML += `<span style="color: #00ff00;">  cls/clear</span>  - Limpiar terminal\n`;
+            output.innerHTML += `<span style="color: #00ff00;">  cd [ruta]</span>   - Cambiar directorio (simulado)\n`;
+            output.innerHTML += `<span style="color: #00ff00;">  help</span>       - Mostrar esta ayuda\n`;
+            output.innerHTML += `<span style="color: #ccc;">Atajos de teclado:</span>\n`;
+            output.innerHTML += `<span style="color: #ffaa00;">  ↑/↓</span>        - Navegar historial\n`;
+            output.innerHTML += `<span style="color: #ffaa00;">  Tab</span>        - Autocompletar\n`;
+            output.innerHTML += `<span style="color: #ffaa00;">  Enter</span>      - Ejecutar comando\n`;
+            output.innerHTML += `<span style="color: #ccc;">Comandos rápidos disponibles arriba de la terminal</span>\n`;
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function addToHistory(command) {
+            if (commandHistory[commandHistory.length - 1] !== command) {
+                commandHistory.push(command);
+                if (commandHistory.length > 50) {
+                    commandHistory.shift();
+                }
+            }
+            updateHistoryDisplay();
+        }
+
+        function navigateHistory(direction) {
+            const input = document.getElementById('terminalInput');
+
+            if (direction === 'up' && historyIndex < commandHistory.length - 1) {
+                historyIndex++;
+                input.value = commandHistory[commandHistory.length - 1 - historyIndex];
+            } else if (direction === 'down' && historyIndex > 0) {
+                historyIndex--;
+                input.value = commandHistory[commandHistory.length - 1 - historyIndex];
+            } else if (direction === 'down' && historyIndex === 0) {
+                historyIndex = -1;
+                input.value = '';
+            }
+        }
+
+        function autoComplete() {
+            const input = document.getElementById('terminalInput');
+            const value = input.value.toLowerCase();
+
+            const suggestions = [
+                'cd', 'dir', 'cls', 'npm install', 'npm run dev', 'npm start',
+                'pnpm install', 'pnpm run dev', 'git status', 'git add', 'git commit',
+                'help', 'clear'
+            ];
+
+            const match = suggestions.find(cmd => cmd.startsWith(value));
+            if (match) {
+                input.value = match;
+            }
+        }
+
+        function insertCommand(command) {
+            const input = document.getElementById('terminalInput');
+            input.value = command;
+            input.focus();
+        }
+
+        function clearTerminal() {
+            const output = document.getElementById('terminalOutput');
+            output.innerHTML = `Microsoft Windows [Versión 10.0.19045.5131]
+(c) Microsoft Corporation. Todos los derechos reservados.
+
+PS C:\\laragon\\www> <span style="color: #ccc;">Terminal limpia y lista</span>
+<span style="color: #00ff00;">Escribe 'help' para ver comandos disponibles</span>
+
+`;
+            updateTerminalStatus('Terminal limpia');
+        }
+
+        function toggleHistory() {
+            const history = document.getElementById('commandHistory');
+            if (history.style.display === 'none' || !history.style.display) {
+                history.style.display = 'block';
+                updateHistoryDisplay();
+            } else {
+                history.style.display = 'none';
+            }
+        }
+
+        function updateHistoryDisplay() {
+            const history = document.getElementById('commandHistory');
+            if (commandHistory.length === 0) {
+                history.innerHTML = '<div class="history-item">No hay comandos en el historial</div>';
+                return;
+            }
+
+            const recentCommands = commandHistory.slice(-10).reverse();
+            history.innerHTML = recentCommands.map(cmd =>
+                `<div class="history-item" onclick="insertCommand('${cmd}')">${cmd}</div>`
+            ).join('');
+        }
+
+        function toggleTerminal() {
+            const container = document.getElementById('terminalContainer');
+            const icon = document.getElementById('toggleIcon');
+            const text = document.getElementById('toggleText');
+
+            if (terminalMinimized) {
+                container.style.height = '400px';
+                icon.className = 'fas fa-compress-alt';
+                text.textContent = 'Minimizar';
+                terminalMinimized = false;
+            } else {
+                container.style.height = '50px';
+                icon.className = 'fas fa-expand-alt';
+                text.textContent = 'Expandir';
+                terminalMinimized = true;
+            }
+        }
+
+        function switchTab(tab) {
+            const tabs = document.querySelectorAll('.terminal-tab');
+            const prompt = document.getElementById('terminalPrompt');
+
+            tabs.forEach(t => t.classList.remove('active'));
+            document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
+
+            currentTab = tab;
+            if (tab === 'cmd') {
+                prompt.textContent = 'C:\\laragon\\www>';
+            } else {
+                prompt.textContent = 'PS C:\\laragon\\www>';
+            }
+
+            updateTerminalStatus(`Modo: ${tab.toUpperCase()}`);
+        }
+
+        function updateTerminalStatus(message) {
+            const status = document.getElementById('terminalStatus');
+            status.textContent = message;
+
+            setTimeout(() => {
+                status.textContent = 'Listo';
+            }, 2000);
+        }
+
+        // Función mejorada para mostrar instrucciones con integración de terminal
+        function showInstructionsWithTerminal(projectFolder) {
+            const project = projects.find(p => p.folder === projectFolder);
+            if (!project) return;
+
+            // Insertar comandos automáticamente en la terminal
+            const commands = [
+                `cd "C:\\laragon\\www\\${project.folder}"`,
+                project.commands[0],
+                project.commands[1]
+            ];
+
+            // Mostrar en terminal
+            const output = document.getElementById('terminalOutput');
+            output.innerHTML += `\n<span style="color: #00aaff;">═══ COMANDOS PARA ${project.name.toUpperCase()} ═══</span>\n`;
+
+            commands.forEach((cmd, index) => {
+                output.innerHTML += `<span style="color: #ffaa00;">${index + 1}. ${cmd}</span>\n`;
+            });
+
+            output.innerHTML += `<span style="color: #ccc;">Haz clic en los comandos rápidos o cópialos manualmente</span>\n`;
+            output.scrollTop = output.scrollHeight;
+
+            // También mostrar el modal original
+            showInstructions(projectFolder);
+        }
+
+        // Variables para la terminal integrada
+        let terminalExpanded = false;
+
+        // Funciones para manejar el iframe de terminal
+        function refreshTerminal() {
+            const iframe = document.getElementById('terminalIframe');
+            iframe.src = iframe.src; // Recargar iframe
+        }
+
+        function openTerminalInNewTab() {
+            window.open('real-terminal.html', '_blank');
+        }
+
+        function toggleTerminalSize() {
+            const container = document.getElementById('terminalContainer');
+            const icon = document.getElementById('toggleIcon');
+            const text = document.getElementById('toggleText');
+            
+            if (terminalExpanded) {
+                container.classList.remove('expanded');
+                icon.className = 'fas fa-expand-alt';
+                text.textContent = 'Expandir';
+                terminalExpanded = false;
+            } else {
+                container.classList.add('expanded');
+                icon.className = 'fas fa-compress-alt';
+                text.textContent = 'Minimizar';
+                terminalExpanded = true;
+            }
+        }
+
+        // Función mejorada para ejecutar comandos de proyecto
+        function executeProjectCommands(projectFolder) {
+            const project = projects.find(p => p.folder === projectFolder);
+            if (!project || !project.commands) return;
+
+            // Abrir terminal en nueva pestaña con comandos específicos
+            const terminalUrl = `real-terminal.html?project=${encodeURIComponent(projectFolder)}`;
+            window.open(terminalUrl, '_blank');
+        }
+
+        // Cargar todo al iniciar
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProjects();
+            loadTechFilters();
+            setupSearch();
+        });
+    </script>
+</body>
+
+</html>
