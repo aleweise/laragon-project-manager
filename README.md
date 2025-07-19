@@ -35,7 +35,7 @@ Un navegador de proyectos moderno para Laragon con terminal real integrada que p
 
 1. **Clona el repositorio:**
    ```bash
-   git clone https://github.com/TU-USUARIO/laragon-project-manager.git
+   git clone https://github.com/aleweise/laragon-project-manager.git
    cd laragon-project-manager
    ```
 
@@ -143,12 +143,6 @@ const PORT = 3002; // Cambia por el puerto deseado
 ## 📝 Licencia
 
 Este proyecto está bajo la Licencia MIT. Ver `LICENSE` para más detalles.
-
-## 👨‍💻 Autor
-
-**Tu Nombre**
-- GitHub: [@tu-usuario](https://github.com/tu-usuario)
-- Email: tu-email@ejemplo.com
 
 ## 🙏 Agradecimientos
 
